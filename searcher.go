@@ -16,9 +16,17 @@ package main
   
  type searcher struct { 
  	weaver.Implements[Searcher] 
+	cache weaver.Ref[Cache]
  } 
   
  func (s *searcher) Search(ctx context.Context, query string) ([]string, error) { 
+	
+	if emojis, err := s.cache.Get().Get(ctx, query); err != nil { 
+		s.Logger(ctx).Error("cache.Get", "query", query, "err", err) 
+	} else if len(emojis) > 0 { 
+		return emojis, nil 
+	} 
+
 	s.Logger(ctx).Debug("Search", "query", query)
  	words := strings.Fields(strings.ToLower(query)) 
  	var results []string 
@@ -28,6 +36,11 @@ package main
  		} 
  	} 
  	sort.Strings(results) 
+	
+	 if err := s.cache.Get().Put(ctx, query, results); err != nil { 
+		s.Logger(ctx).Error("cache.Put", "query", query, "err", err) 
+	} 
+
  	return results, nil 
  } 
   
