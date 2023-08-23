@@ -19,7 +19,7 @@ package main
  } 
   
  func (s *searcher) Search(ctx context.Context, query string) ([]string, error) { 
-
+	s.Logger(ctx).Debug("Search", "query", query)
  	words := strings.Fields(strings.ToLower(query)) 
  	var results []string 
  	for emoji, labels := range emojis { 
