@@ -19,11 +19,12 @@ package main
   
  // cache implements the Cache component. 
  type cache struct { 
- 	weaver.Implements[Cache] 
-  
- 	mu     sync.Mutex 
- 	emojis map[string][]string 
- } 
+	weaver.Implements[Cache] 
+	weaver.WithRouter[router] 
+ 
+	mu     sync.Mutex 
+	emojis map[string][]string 
+} 
   
  func (c *cache) Init(context.Context) error { 
  	c.emojis = map[string][]string{} 
@@ -43,4 +44,14 @@ package main
  	c.Logger(ctx).Debug("Put", "query", query) 
  	c.emojis[query] = emojis 
  	return nil 
+ } 
+
+ type router struct{} 
+  
+ func (router) Get(_ context.Context, query string) string { 
+ 	return query 
+ } 
+  
+ func (router) Put(_ context.Context, query string, _ []string) string { 
+ 	return query 
  } 
