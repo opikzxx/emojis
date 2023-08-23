@@ -15,11 +15,16 @@ package main
   
  // app is the main component of our application. 
  type app struct { 
- 	weaver.Implements[weaver.Main] 
- } 
+	weaver.Implements[weaver.Main] 
+	searcher weaver.Ref[Searcher] 
+} 
   
  // run implements the application main. 
  func run(ctx context.Context, a *app) error { 
- 	fmt.Println("Hello, World!") 
- 	return nil 
- } 
+	emojis, err := a.searcher.Get().Search(ctx, "pig") 
+	if err != nil { 
+		return err 
+	} 
+	fmt.Println(emojis) 
+	return nil 
+} 
