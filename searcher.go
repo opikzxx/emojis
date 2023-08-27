@@ -5,8 +5,9 @@ package main
  	"sort" 
  	"strings" 
   
- 	"github.com/ServiceWeaver/weaver" 
- 	"golang.org/x/exp/slices" 
+	 "github.com/ServiceWeaver/weaver"
+	 "github.com/ServiceWeaver/weaver/metrics"
+	 "golang.org/x/exp/slices" 
  ) 
 
  var (
